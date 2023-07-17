@@ -1,110 +1,229 @@
 <template>
-  <div v-if="!item.hidden && item.children" class="menu-wrapper" :class="collapse ? `` : `active-menu-wrapper`">
-    <div v-if="item.onlyShowfirst">
-      <router-link v-if="OneShowingChild(item.children[0]) && !onlyOneChild.children && !item.alwaysShow"
-        :to="resolvePath(onlyOneChild.path)">
-        <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{ 'submenu-title-noDropdown': !isNest }">
-          <svg-icon v-if="onlyOneChild.meta && onlyOneChild.meta.icon" :icon-class="onlyOneChild.meta.icon"></svg-icon>
-          <span v-if="onlyOneChild.meta && onlyOneChild.meta.title" slot="title">{{ onlyOneChild.meta.title }}</span>
-        </el-menu-item>
-      </router-link>
-    </div>
-
-    <div v-else>
-      <router-link v-if="hasOneShowingChild(item.children) && !onlyOneChild.children && !item.alwaysShow"
-        :to="resolvePath(onlyOneChild.path)">
-        <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{ 'submenu-title-noDropdown': !isNest }">
-          <svg-icon v-if="onlyOneChild.meta && onlyOneChild.meta.icon" :icon-class="onlyOneChild.meta.icon"></svg-icon>
-          <span v-if="onlyOneChild.meta && onlyOneChild.meta.title" slot="title">{{ onlyOneChild.meta.title }}</span>
-        </el-menu-item>
-      </router-link>
-
-      <el-submenu v-else :index="item.name || item.path">
-        <template slot="title">
-          <svg-icon v-if="item.meta && item.meta.icon" :icon-class="item.meta.icon"></svg-icon>
-          <span v-if="item.meta && item.meta.title" slot="title">{{ item.meta.title }}</span>
-        </template>
-
-        <template v-for="child in item.children" v-if="!child.hidden">
-          <sidebar-item :is-nest="true" class="nest-menu" v-if="child.children && child.children.length > 0" :item="child"
-            :key="child.path" :base-path="resolvePath(child.path)"></sidebar-item>
-
-          <router-link v-else :to="resolvePath(child.path)" :key="child.name">
-            <el-menu-item :index="resolvePath(child.path)">
-              <svg-icon v-if="child.meta && child.meta.icon" :icon-class="child.meta.icon"></svg-icon>
-              <span v-if="child.meta && child.meta.title" slot="title">{{ child.meta.title }}</span>
-            </el-menu-item>
-          </router-link>
-        </template>
-      </el-submenu>
-    </div>
-  </div>
+	<div class="sidebar">
+		<el-menu class="sidebar-el-menu" :default-active="onRoutes" :collapse="collapse" background-color="#324157"
+		 text-color="#bfcbd9" active-text-color="#20a0ff" unique-opened router>
+			<!-- 第一层 -->
+			<template v-for="item in items">
+				<!-- 如果第一层有子菜单，则继续循环 -->
+				<template v-if="item.subs">
+					<el-submenu :index="item.index" :key="item.index">
+						<template slot="title">
+							<i :class="item.icon"></i>
+							<span slot="title">{{ item.title }}</span>
+						</template>
+						<!-- 第二层 -->
+						<template v-for="subItem in item.subs">
+							<!-- 如果第二层有子菜单，则继续循环 -->
+							<template v-if="subItem.subs">
+								<el-submenu :index="subItem.index" :key="subItem.index">
+									<template slot="title">
+										<i :class="item.icon"></i>
+										<span slot="title">{{ subItem.title }}</span>
+									</template>
+									<!-- <el-menu-item v-for="(threeItem,i) in subItem.subs" :key="i" :index="threeItem.index">{{ threeItem.title }}</el-menu-item> -->
+									<!-- 第三层 -->
+									<template v-for="subItem2 in subItem.subs.subs">
+										<!-- 如果第三层有子菜单，则继续循环 -->
+										<template v-if="subItem2.subs">
+											<el-submenu :index="subItem2.index" :key="subItem2.index">
+												<template slot="title">
+													<i :class="item.icon"></i>
+													<span slot="title">{{ subItem2.title }}</span>
+												</template>
+												<!-- <el-menu-item v-for="(fourItem,i) in subItem2.subs" :key="i" :index="fourItem.index">{{ fourItem.title }}</el-menu-item> -->
+												<!-- 第四层 -->
+												<template v-for="subItem3 in subItem2.subs">
+													<!-- 如果第四层有子菜单，则继续循环 -->
+													<template v-if="subItem3.subs">
+														<el-submenu :index="subItem3.index" :key="subItem3.index">
+															<template slot="title">
+																<!-- <i :class="item.icon"></i> -->
+																<!-- <span slot="title">{{ subItem2.title }}</span> -->
+																{{ subItem3.title }}
+															</template>
+															<el-menu-item v-for="(fiveItem,i) in subItem3.subs" :key="i" :index="fiveItem.index">{{ fiveItem.title }}</el-menu-item>
+														</el-submenu>
+													</template>
+													<!-- 如果第四层没有子菜单 -->
+													<el-menu-item v-else :index="subItem3.index" :key="subItem3.index">{{ subItem3.title }}</el-menu-item>
+												</template>
+											</el-submenu>
+										</template>
+										<!-- 如果第三层没有子菜单 -->
+										<el-menu-item v-else :index="subItem2.index" :key="subItem2.index">{{ subItem2.title }}</el-menu-item>
+									</template>
+								</el-submenu>
+							</template>
+							<!-- 如果第二层没有子菜单 -->
+							<el-menu-item v-else :index="subItem.index" :key="subItem.index">{{ subItem.title }}</el-menu-item>
+						</template>
+					</el-submenu>
+				</template>
+				<!-- 如果第一层没有子菜单 -->
+				<template v-else>
+					<el-menu-item :index="item.index" :key="item.index">
+						<i :class="item.icon"></i>
+						<span slot="title">{{ item.title }}</span>
+					</el-menu-item>
+				</template>
+			</template>
+		</el-menu>
+	</div>
 </template>
-
+ 
 <script>
-
-export default {
-  name: "SidebarItem",
-  props: {
-    // route配置json
-    item: {
-      type: Object,
-      required: true
-    },
-    isNest: {
-      type: Boolean,
-      default: false
-    },
-    basePath: {
-      type: String,
-      default: ""
-    },
-    collapse: {
-      type: Boolean,
-      required: true
+	// import bus from '../common/bus';
+	export default {
+		data() {
+			return {
+				collapse: false,
+				items: [
+					{
+						icon: 'el-icon-lx-calendar',
+						index: '3',
+						title: '成都大运会道路检测',
+						subs: [{
+								index: 'form',
+								title: '高新片区',
+                subs:{
+								index: '3-2',
+								title: '紫瑞大道段',
+								subs: [{
+										index: '1',
+										title: 'gpr001'
+									},
+									{
+										index: '2',
+										title: 'gpr002'
+									},
+                  {
+										index: '3',
+										title: 'gpr003'
+									},
+									{
+										index: '3-2-1',
+										title: '创业路段',
+										subs: [{
+											index: 'music',
+											title: 'gdp001'
+										},
+										{
+											index:'math',
+											title:'gdp002'
+										}
+                    // ,{
+										// 	index: '3-2-1-1',
+										// 	title: '五级菜单',
+										// 	subs: [{
+										// 		index:'english',
+										// 		title:'英语时间'
+										// 	}, {
+										// 		index:'show',
+										// 		title:'展示时间'
+										// 	}]
+										// }
+                  ]
+									}
+								]
+							},
+							},
+							
+							// {
+							// 	index: 'upload',
+							// 	title: '文件上传'
+							// }
+						]
+					},
+					// {
+					// 	icon: 'el-icon-lx-emoji',
+					// 	index: 'icon',
+					// 	title: '自定义图标'
+					// },
+					// {
+					// 	icon: 'el-icon-pie-chart',
+					// 	index: 'charts',
+					// 	title: 'schart图表'
+					// },
+					// {
+					// 	icon: 'el-icon-rank',
+					// 	index: '6',
+					// 	title: '拖拽组件',
+					// 	subs: [{
+					// 			index: 'drag',
+					// 			title: '拖拽列表'
+					// 		},
+					// 		{
+					// 			index: 'dialog',
+					// 			title: '拖拽弹框'
+					// 		}
+					// 	]
+					// },
+					// {
+					// 	icon: 'el-icon-lx-global',
+					// 	index: 'i18n',
+					// 	title: '国际化功能'
+					// },
+					// {
+					// 	icon: 'el-icon-lx-warn',
+					// 	index: '7',
+					// 	title: '错误处理',
+					// 	subs: [{
+					// 			index: 'permission',
+					// 			title: '权限测试'
+					// 		},
+					// 		{
+					// 			index: '404',
+					// 			title: '404页面'
+					// 		}
+					// 	]
+					// },
+					// {
+					// 	icon: 'el-icon-lx-redpacket_fill',
+					// 	index: '/donate',
+					// 	title: '支持作者'
+					// }
+				]
+			};
+		},
+		computed: {
+			onRoutes() {
+				// return this.$route.path.replace('/', '');
+			}
+		},
+    created(){
+      console.log(this.items);
     }
-  },
-  data() {
-    return {
-      onlyOneChild: null
-    };
-  },
-  methods: {
-    hasOneShowingChild(children) {
-      const showingChildren = children.filter(item => {
-        if (item.hidden) {
-          return false;
-        } else {
-          this.onlyOneChild = item;
-          return true;
-        }
-      });
-      if (showingChildren.length === 1) {
-        return true;
-      }
-      return false;
-    },
-    resolvePath(...paths) {
-      return this.basePath + "/" + paths[0];
-    },
-    OneShowingChild(children) {
-      this.onlyOneChild = children;
-      return true;
-    }
-  }
-};
+		// created() {
+		// 	// 通过 Event Bus 进行组件间通信，来折叠侧边栏,这里接收的是header.vue那边的数据collapse
+		// 	bus.$on('collapse', msg => {
+		// 		console.log("sidebar.vue",msg);
+		// 		this.collapse = msg;
+		// 		// 这里是向home.vue发送数据collapse-content
+		// 		bus.$emit('collapse-content', msg);
+		// 	});
+		// }
+	};
 </script>
-<style lang="scss" scoped>
-.menu-wrapper {
-
-  ::v-deep .el-menu-item,
-  .el-submenu__title {
-    height: 46px;
-    line-height: 46px;
-  }
-
-  ::v-deep .el-menu-item {
-    padding: 0 20px 0 12px;
-  }
-}
+ 
+<style scoped>
+	.sidebar {
+		display: block;
+		/* position: absolute;
+		left: 0;
+		top: 70px;
+		bottom: 0; */
+		overflow-y: scroll;
+	}
+ 
+	.sidebar::-webkit-scrollbar {
+		width: 0;
+	}
+ 
+	.sidebar-el-menu:not(.el-menu--collapse) {
+		width: 250px;
+	}
+ 
+	.sidebar>ul {
+		height: 100%;
+	}
 </style>

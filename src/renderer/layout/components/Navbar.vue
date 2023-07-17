@@ -1,15 +1,17 @@
 <template>
-  <el-menu :class="'navbar-header-fixed' + (isMac ? ' dragTitle' : '')" mode="horizontal">
+  <el-menu class="navbar-header-fixed" mode="horizontal">
     <div class="top-right">
       <div class="hb-bd">
-        <hamburger class="hamburger-container" @toggle-click="toggleSideBar" :isActive="sidebarComp.opened"></hamburger>
-        <breadcrumb></breadcrumb>
+        <!-- <hamburger class="hamburger-container" @toggle-click="toggleSideBar" :isActive="sidebarComp.opened"></hamburger>
+        <breadcrumb></breadcrumb> -->
+        <img src="../../assets/logo.png" alt="">
       </div>
 
       <div class="top-select">
-        <div class="go-index">{{ time }}</div>
-        <div class="select-right">
-          <el-dropdown trigger="click">
+        <!-- <div class="go-index">{{ time }}</div> -->
+        <div class="select-right" >
+        
+          <el-dropdown trigger="click" >
             <div>
               <el-image :src="userImage" class="avatar">
                 <div slot="error" class="image-slot">
@@ -21,15 +23,15 @@
                 <i class="el-icon-arrow-down el-icon--right"></i>
               </div>
             </div>
-            <el-dropdown-menu slot="dropdown">
+            <el-dropdown-menu slot="dropdown" >
               <router-link to="/">
                 <el-dropdown-item>返回首页</el-dropdown-item>
               </router-link>
-              <el-dropdown-item @click.native="logout">
-                <span>切换账号</span>
+              <el-dropdown-item >
+                <span @click="logout">切换账号</span>
               </el-dropdown-item>
-              <el-dropdown-item @click.native="logout">
-                <span>退出登录</span>
+              <el-dropdown-item >
+                <span @click="logout">退出登录</span>
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -85,6 +87,10 @@ const logout = () => {
     router.push('/login')
   })
 }
+const alfun = () =>{
+  alert(11222)
+  console.log(123);
+}
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
@@ -122,6 +128,10 @@ const logout = () => {
       display: flex;
       justify-content: center;
       align-items: center;
+      img{
+        width: 94px;
+        height: 54px;
+      }
     }
 
     .avatar {
@@ -170,5 +180,11 @@ const logout = () => {
 .dragTitle {
   -webkit-app-region: drag;
 }
-</style>
 
+</style>
+<style>
+.el-dropdown-menu {
+z-index: 3000 !important;
+}
+
+</style>

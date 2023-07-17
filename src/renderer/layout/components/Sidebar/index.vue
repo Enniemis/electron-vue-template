@@ -2,8 +2,7 @@
   <scroll-bar>
     <el-menu mode="vertical" :show-timeout="200" :default-active="$route.path" :collapse="isCollapse">
       <Logo :collapse="isCollapse" />
-      <sidebar-item v-for="route in routes_list" :key="route.name" :item="route" :base-path="route.path"
-        :collapse="isCollapse"></sidebar-item>
+      <sidebar-item ></sidebar-item>
     </el-menu>
   </scroll-bar>
 </template>
@@ -21,7 +20,7 @@ defineComponent({
 const { sidebarStatus } = useAppStore()
 const { routers } = usePermissionStore()
 
-const routes_list = computed(() => routers)
+// const routes_list = computed(() => routers)
 
 const isCollapse = computed(() => !sidebarStatus.opened)
 </script>

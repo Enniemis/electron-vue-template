@@ -3,7 +3,7 @@
     <div class="login-from-box">
       <el-form class="login-form" autocomplete="on" :model="loginForm" :rules="loginRules" ref="loginFormRef"
         label-position="left">
-        <h3 class="title">后台管理框架</h3>
+        <h3 class="title">城市道路浅层病害智能识别系统</h3>
         <el-form-item prop="username">
           <span class="svg-container svg-container_login">
             <svg-icon icon-class="user" />
@@ -16,17 +16,17 @@
           </span>
           <el-input name="password" :type="pwdType" @keyup.enter.native="handleLogin" v-model="loginForm.password"
             autocomplete="on" placeholder="密码"></el-input>
-          <span class="show-pwd" @click="showPwd">
+          <!-- <span class="show-pwd" @click="showPwd">
             <svg-icon :icon-class="pwdType === 'password' ? 'eye' : 'eye-open'" />
-          </span>
+          </span> -->
         </el-form-item>
         <div class="login-btn">
           <button type="button" class="btn" @click="handleLogin">登录</button>
         </div>
-        <div class="tips">
+        <!-- <div class="tips">
           <span style="margin-right:20px;">用户名: admin或者editor</span>
           <span>密码：随便什么都行</span>
-        </div>
+        </div> -->
       </el-form>
     </div>
   </div>
@@ -56,8 +56,8 @@ const validatePass = (rule, value, callback) => {
 };
 
 const loginForm = ref({
-  username: "",
-  password: "",
+  username: "admin",
+  password: "123456",
 });
 const loginFormRef = ref()
 const loginRules = ref({
@@ -110,7 +110,8 @@ $light_gray: #eee;
   width: 100%;
   top: 0;
   left: 0;
-  background-image: url("https://i.loli.net/2019/10/18/buDT4YS6zUMfHst.jpg");
+  background: url("../../assets/banner.png") no-repeat;
+  // background-size: 100% ;
   background-position: center;
 
   ::v-deep .el-input {

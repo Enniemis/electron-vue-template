@@ -31,6 +31,11 @@
 </div>
 
 > ### **请确保您的 node 环境是大于或等于 16**
+> ### node 版本 最好 18.0.0
+> ### 使用yarn，配置好淘宝镜像
+# yarn config set registry https://registry.npm.taobao.org -g 
+# yarn config set sass_binary_site http://cdn.npm.taobao.org/dist/node-sass -g
+
 
 #### 如何安装
 
